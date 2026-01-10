@@ -38,21 +38,6 @@ import Link from "next/link"
 import { useState } from "react"
 import { MoreHorizontal, Edit3, Trash2, ExternalLink, Copy, Download, Eye } from "lucide-react"
 import { toast } from "sonner"
-// import { MarkedToggleButton } from "./marked-toggle"
-
-
-// interface ProjectTableProps {
-//   projects: Project[]
-//   onUpdateProject?: (id: string, data: { title: string; description: string }) => Promise<void>
-//   onDeleteProject?: (id: string) => Promise<void>
-//   onDuplicateProject?: (id: string) => Promise<void>
-//   onMarkasFavorite?: (id: string) => Promise<void>
-// }
-
-// interface EditProjectData {
-//   title: string
-//   description: string
-// }
 
 export default function ProjectTable({
   projects,
@@ -67,11 +52,11 @@ export default function ProjectTable({
   const [editData, setEditData] = useState({ title: "", description: "" })
   const [isLoading, setIsLoading] = useState(false)
   const [favoutrie, setFavourite] = useState(false)
-  
+
   const handleEditClick = (project) => {
     setSelectedProject(project)
     setEditData({
-      title:project.title,
+      title: project.title,
       description: project.description || ""
     })
     setEditDialogOpen(true)
@@ -83,43 +68,43 @@ export default function ProjectTable({
   }
 
   const handleUpdateProject = async () => {
-   if(!selectedProject || !onUpdateProject) return
+    if (!selectedProject || !onUpdateProject) return
 
-   setIsLoading(true)
-   try {
-    await onUpdateProject(selectedProject.id, editData)
-    setEditDialogOpen(false)
-    toast.success('Project updated successfuly')
-   } catch (error) {
-    toast.error("Failed to update project")
-    console.error("Error updating project:", error)
-   }finally{
-    setIsLoading(false)
-   }
+    setIsLoading(true)
+    try {
+      await onUpdateProject(selectedProject.id, editData)
+      setEditDialogOpen(false)
+      toast.success('Project updated successfuly')
+    } catch (error) {
+      toast.error("Failed to update project")
+      console.error("Error updating project:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleMarkasFavorite = async (project) => {
-   //    Write your logic here
+    //    Write your logic here
   }
 
   const handleDeleteProject = async () => {
-   if(!selectedProject || !onDeleteProject) return
+    if (!selectedProject || !onDeleteProject) return
 
-   setIsLoading(true)
-   try {
-    await onDeleteProject(selectedProject.id)
-    setDeleteDialogOpen(false)
-    toast.success('Project deleted successfuly')
-   } catch (error) {
-    toast.error("Failed to delete project")
-    console.error("Error deleting project:", error)
-   }finally{
-    setIsLoading(false)
-   }
+    setIsLoading(true)
+    try {
+      await onDeleteProject(selectedProject.id)
+      setDeleteDialogOpen(false)
+      toast.success('Project deleted successfuly')
+    } catch (error) {
+      toast.error("Failed to delete project")
+      console.error("Error deleting project:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleDuplicateProject = async (project) => {
-     if (!onDuplicateProject) return;
+    if (!onDuplicateProject) return;
 
     setIsLoading(true);
     try {
@@ -134,14 +119,15 @@ export default function ProjectTable({
   }
 
   const copyProjectUrl = (projectId) => {
-    const url =`${ window.location.origin}/playground/${projectId}`
+    const url = `${window.location.origin}/playground/${projectId}`
     navigator.clipboard.writeText(url)
     toast.success("Copied to clipboard")
   }
 
   return (
     <>
-      <div className="border rounded-lg overflow-hidden">
+      {/* Desktop Table View */}
+      <div className="hidden md:block border rounded-lg overflow-hidden w-full">
         <Table>
           <TableHeader>
             <TableRow>
@@ -157,14 +143,14 @@ export default function ProjectTable({
               <TableRow key={project.id}>
                 <TableCell className="font-medium">
                   <div className="flex flex-col">
-                    <Link href={"#"} className="hover:underline">
+                    <Link href={`/playground/${project.id}`} className="hover:underline">
                       <span className="font-semibold">{project.title}</span>
                     </Link>
                     <span className="text-sm text-gray-500 line-clamp-1">{project.description}</span>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline" className="bg-[#E93F3F15] text-[#E93F3F] border-[#E93F3F]">
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
                     {project.template}
                   </Badge>
                 </TableCell>
@@ -193,16 +179,13 @@ export default function ProjectTable({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuItem asChild>
-                        {/* <MarkedToggleButton markedForRevision={project.Starmark[0]?.isMarked} id={project.id} /> */}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href={"#"} className="flex items-center">
+                        <Link href={`/playground/${project.id}`} className="flex items-center">
                           <Eye className="h-4 w-4 mr-2" />
                           Open Project
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link href={"#"} target="_blank" className="flex items-center">
+                        <Link href={`/playground/${project.id}`} target="_blank" className="flex items-center">
                           <ExternalLink className="h-4 w-4 mr-2" />
                           Open in New Tab
                         </Link>
@@ -235,6 +218,92 @@ export default function ProjectTable({
             ))}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4 w-full">
+        {Array.isArray(projects) && projects.map((project) => (
+          <div key={project.id} className="border rounded-lg p-4 space-y-3 bg-card">
+            {/* Header with title and actions */}
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex-1 min-w-0">
+                <Link href={`/playground/${project.id}`} className="hover:underline">
+                  <h3 className="font-semibold text-base truncate">{project.title}</h3>
+                </Link>
+                {project.description && (
+                  <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{project.description}</p>
+                )}
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                    <MoreHorizontal className="h-4 w-4" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link href={`/playground/${project.id}`} className="flex items-center">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Open Project
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/playground/${project.id}`} target="_blank" className="flex items-center">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Open in New Tab
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleEditClick(project)}>
+                    <Edit3 className="h-4 w-4 mr-2" />
+                    Edit Project
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleDuplicateProject(project)}>
+                    <Copy className="h-4 w-4 mr-2" />
+                    Duplicate
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => copyProjectUrl(project.id)}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Copy URL
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => handleDeleteClick(project)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete Project
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Meta information */}
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+                {project.template}
+              </Badge>
+              <span className="text-muted-foreground">
+                {format(new Date(project.createdAt), "MMM d, yyyy")}
+              </span>
+            </div>
+
+            {/* User info */}
+            <div className="flex items-center gap-2 pt-2 border-t">
+              <div className="w-6 h-6 rounded-full overflow-hidden">
+                <Image
+                  src={project.user.image || "/placeholder.svg"}
+                  alt={project.user.name}
+                  width={24}
+                  height={24}
+                  className="object-cover"
+                />
+              </div>
+              <span className="text-sm text-muted-foreground">{project.user.name}</span>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Edit Project Dialog */}
@@ -303,5 +372,4 @@ export default function ProjectTable({
     </>
   )
 }
-
 

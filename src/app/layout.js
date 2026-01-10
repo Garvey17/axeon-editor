@@ -1,17 +1,15 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { auth } from "../../auth";
-import {SessionProvider} from "next-auth/react"
+import { SessionProvider } from "next-auth/react"
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const googleSans = Inter({
+  variable: "--font-google-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -25,21 +23,21 @@ export default async function RootLayout({ children }) {
     <SessionProvider session={session}>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${googleSans.variable} antialiased font-sans`}
         >
           <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
           >
             <div className="flex flex-col min-h-screen">
-              <Toaster/>
+              <Toaster />
               <div className="flex-1">
                 {children}
               </div>
             </div>
-           
+
           </ThemeProvider>
         </body>
       </html>

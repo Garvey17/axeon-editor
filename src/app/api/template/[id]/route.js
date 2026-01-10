@@ -8,38 +8,38 @@ import { success } from "zod";
 
 
 
-function validateJsonStructure(data){
+function validateJsonStructure(data) {
     try {
         JSON.parse(JSON.stringify(data))
         return true
     } catch (error) {
         console.error("Invalid JSON structure", error)
         return false
-        
+
     }
 }
 
 
-export async function GET(request, {params}){
-    const {id} = await params
+export async function GET(request, { params }) {
+    const { id } = await params
 
-    if(!id){
-        return Response.json({error: "Missing Playground ID"}, {status: 400})
+    if (!id) {
+        return Response.json({ error: "Missing Playground ID" }, { status: 400 })
     }
 
     const playground = await db.playground.findUnique({
-        where:{id}
+        where: { id }
     })
 
-    if(!playground){
-        return Response.json({error: "Playground not found"}, {status:404})
+    if (!playground) {
+        return Response.json({ error: "Playground not found" }, { status: 404 })
     }
 
     const templateKey = playground.template
     const templatePath = templatePaths[templateKey]
 
-    if(!templatePath){
-        return Response.json({error: "Path not found"}, {status: 404})
+    if (!templatePath) {
+        return Response.json({ error: "Path not found" }, { status: 404 })
     }
 
     try {
@@ -50,15 +50,15 @@ export async function GET(request, {params}){
         await saveTemplateStructureToJson(inputPath, outputFile)
         const result = await readTemplateStructureFromJson(outputFile)
 
-        if(!validateJsonStructure(result.items)){
-            return Response.json({error: "Invalid JSON structure "}, {status: 500})
+        if (!validateJsonStructure(result.items)) {
+            return Response.json({ error: "Invalid JSON structure " }, { status: 500 })
         }
 
         await fs.unlink(outputFile)
 
-        return Response.json({success: true, templateJson:result}, {status: 200})
+        return Response.json({ success: true, templateJson: result }, { status: 200 })
     } catch (error) {
         console.error("Error generating template JSON:", error)
-        return Response.json({error: "Failed to generate template"}, {status: 500})
+        return Response.json({ error: "Failed to generate template" }, { status: 500 })
     }
 }

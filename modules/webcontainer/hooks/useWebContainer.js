@@ -4,7 +4,7 @@ import { WebContainer } from "@webcontainer/api";
 
 export const useWebContainer = ({
   templateData,
-})=> {
+}) => {
   const [serverUrl, setServerUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,7 +45,7 @@ export const useWebContainer = ({
   }, []);
 
   const writeFileSync = useCallback(
-    async (path, content)=> {
+    async (path, content) => {
       if (!instance) {
         throw new Error("WebContainer instance is not available");
       }
@@ -69,13 +69,13 @@ export const useWebContainer = ({
     [instance]
   );
 
-  const destory = useCallback(()=>{
-    if(instance){
-        instance.teardown()
-        setInstance(null);
-        setServerUrl(null)
+  const destory = useCallback(() => {
+    if (instance) {
+      instance.teardown()
+      setInstance(null);
+      setServerUrl(null)
     }
-  },[instance])
+  }, [instance])
 
-  return {serverUrl , isLoading , error , instance , writeFileSync , destory}
+  return { serverUrl, isLoading, error, instance, writeFileSync, destory }
 };

@@ -6,33 +6,33 @@ import Image from "next/image"
 const AddRepo = () => {
   return (
     <div
-      className="group px-6 py-6 flex flex-row justify-between items-center border rounded-lg bg-muted cursor-pointer 
+      className="group px-4 sm:px-6 py-4 sm:py-6 flex flex-col sm:flex-row justify-between items-center border border-green-200 rounded-lg bg-gradient-to-br from-green-50 to-white cursor-pointer 
       transition-all duration-300 ease-in-out
-      hover:bg-background hover:border-[#E93F3F] hover:scale-[1.02]
-      shadow-[0_2px_10px_rgba(0,0,0,0.08)]
-      hover:shadow-[0_10px_30px_rgba(233,63,63,0.15)]"
+      hover:border-green-500 hover:scale-[1.02]
+      shadow-[0_2px_10px_rgba(34,197,94,0.1)]
+      hover:shadow-[0_10px_30px_rgba(34,197,94,0.2)]"
     >
-      <div className="flex flex-row justify-center items-start gap-4">
+      <div className="flex flex-row justify-center items-start gap-3 sm:gap-4 w-full sm:w-auto">
         <Button
           variant={"outline"}
-          className="flex justify-center items-center bg-white group-hover:bg-[#fff8f8] group-hover:border-[#E93F3F] group-hover:text-[#E93F3F] transition-colors duration-300"
+          className="flex justify-center items-center bg-white border-green-300 text-green-600 group-hover:bg-green-500 group-hover:border-green-500 group-hover:text-white transition-colors duration-300 shrink-0"
           size={"icon"}
         >
-          <ArrowDown size={30} className="transition-transform duration-300 group-hover:translate-y-1" />
+          <ArrowDown size={24} className="sm:w-[30px] sm:h-[30px] transition-transform duration-300 group-hover:translate-y-1" />
         </Button>
         <div className="flex flex-col">
-          <h1 className="text-xl font-bold text-[#e93f3f]">Open Github Repository</h1>
-          <p className="text-sm text-muted-foreground max-w-[220px]">Work with your repositories in our editor</p>
+          <h1 className="text-lg sm:text-xl font-bold text-green-600">Open Github Repository</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-[220px]">Work with your repositories in our editor</p>
         </div>
       </div>
 
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden mt-4 sm:mt-0">
         <Image
           src={"/github.svg"}
           alt="Open GitHub repository"
-          width={150}
-          height={150}
-          className="transition-transform duration-300 group-hover:scale-110"
+          width={120}
+          height={120}
+          className="sm:w-[150px] sm:h-[150px] transition-transform duration-300 group-hover:scale-110"
         />
       </div>
     </div>
@@ -40,5 +40,4 @@ const AddRepo = () => {
 }
 
 export default AddRepo
-
 

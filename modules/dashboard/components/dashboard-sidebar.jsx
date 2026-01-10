@@ -67,7 +67,7 @@ export function DashboardSidebar({ initialPlaygroundData }) {
         <div className="flex items-center gap-2 px-4 py-3 justify-center">
           <Image src={"/logo.svg"} alt="logo" height={60} width={60} />
         </div>
-       
+
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -88,7 +88,7 @@ export function DashboardSidebar({ initialPlaygroundData }) {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          
+
           </SidebarMenu>
         </SidebarGroup>
 
@@ -145,10 +145,10 @@ export function DashboardSidebar({ initialPlaygroundData }) {
                     <SidebarMenuItem key={playground.id}>
                       <SidebarMenuButton
                         asChild
-                         isActive={pathname == `/playground/${playground.id}`}
+                        isActive={pathname == `/playground/${playground.id}`}
                         tooltip={playground.name}
                       >
-                        <Link href={`/playgroun/${playground.id}`}>
+                        <Link href={`/playground/${playground.id}`}>
                           {IconComponent && <IconComponent className="h-4 w-4" />}
                           <span>{playground.name}</span>
                         </Link>

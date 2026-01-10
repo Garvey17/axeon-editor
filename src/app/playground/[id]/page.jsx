@@ -33,11 +33,11 @@ import { findFilePath } from '../../../../modules/playground/lib'
 
 
 const MainPlaygroundPage = () => {
-    const {id} = useParams()
-    const {playgroundData, templateData, isLoading, error, saveTemplateData } = usePlayground(id)
-    console.log("template data:", templateData);
-    console.log("playground data:", playgroundData);
-    const [isPreviewVisible, setIsPreviewVisible] = useState(false)
+  const { id } = useParams()
+  const { playgroundData, templateData, isLoading, error, saveTemplateData } = usePlayground(id)
+  console.log("template data:", templateData);
+  console.log("playground data:", playgroundData);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false)
 
   const {
     setTemplateData,
@@ -59,7 +59,7 @@ const MainPlaygroundPage = () => {
     updateFileContent
   } = useFileExplorer();
 
-    const {
+  const {
     serverUrl,
     isLoading: containerLoading,
     error: containerError,
@@ -69,15 +69,15 @@ const MainPlaygroundPage = () => {
 
   const lastSyncedContent = useRef(new Map());
 
-  useEffect(() => {setPlaygroundId(id)}, [id, setPlaygroundId])
+  useEffect(() => { setPlaygroundId(id) }, [id, setPlaygroundId])
 
-  useEffect(()=>{
-    if(templateData && !openFiles.lenght){
+  useEffect(() => {
+    if (templateData && !openFiles.lenght) {
       setTemplateData(templateData)
     }
   }, [templateData, setTemplateData, openFiles.length])
 
-    const wrappedHandleAddFile = useCallback(
+  const wrappedHandleAddFile = useCallback(
     (newFile, parentPath) => {
       return handleAddFile(
         newFile,
@@ -141,9 +141,9 @@ const MainPlaygroundPage = () => {
     [handleRenameFolder, saveTemplateData]
   );
 
-  const activeFile= openFiles.find((file) => file.id === activeFileId)
+  const activeFile = openFiles.find((file) => file.id === activeFileId)
 
-  const hasUnsavedChanges = openFiles.some((file)=>file.hasUnsavedChanges)
+  const hasUnsavedChanges = openFiles.some((file) => file.hasUnsavedChanges)
 
   const handleFileSelect = (file) => {
     openFile(file)
@@ -162,7 +162,7 @@ const MainPlaygroundPage = () => {
       if (!latestTemplateData) return
 
       try {
-            const filePath = findFilePath(fileToSave, latestTemplateData);
+        const filePath = findFilePath(fileToSave, latestTemplateData);
         if (!filePath) {
           toast.error(
             `Could not find path for file: ${fileToSave.filename}.${fileToSave.fileExtension}`
@@ -170,13 +170,13 @@ const MainPlaygroundPage = () => {
           return;
         }
 
-   const updatedTemplateData = JSON.parse(
+        const updatedTemplateData = JSON.parse(
           JSON.stringify(latestTemplateData)
         );
 
         // @ts-ignore
-          const updateFileContent = (items) =>
-            // @ts-ignore
+        const updateFileContent = (items) =>
+          // @ts-ignore
           items.map((item) => {
             if ("folderName" in item) {
               return { ...item, items: updateFileContent(item.items) };
@@ -192,7 +192,7 @@ const MainPlaygroundPage = () => {
           updatedTemplateData.items
         );
 
-          // Sync with WebContainer
+        // Sync with WebContainer
         if (writeFileSync) {
           await writeFileSync(filePath, fileToSave.content);
           lastSyncedContent.current.set(fileToSave.id, fileToSave.content);
@@ -201,26 +201,26 @@ const MainPlaygroundPage = () => {
           }
         }
 
-           const newTemplateData = await saveTemplateData(updatedTemplateData);
+        const newTemplateData = await saveTemplateData(updatedTemplateData);
         setTemplateData(newTemplateData || updatedTemplateData);
         // Update open files
         const updatedOpenFiles = openFiles.map((f) =>
           f.id === targetFileId
             ? {
-                ...f,
-                content: fileToSave.content,
-                originalContent: fileToSave.content,
-                hasUnsavedChanges: false,
-              }
+              ...f,
+              content: fileToSave.content,
+              originalContent: fileToSave.content,
+              hasUnsavedChanges: false,
+            }
             : f
         );
         setOpenFiles(updatedOpenFiles);
 
-    toast.success(
+        toast.success(
           `Saved ${fileToSave.filename}.${fileToSave.fileExtension}`
         );
       } catch (error) {
-         console.error("Error saving file:", error);
+        console.error("Error saving file:", error);
         toast.error(
           `Failed to save ${fileToSave.filename}.${fileToSave.fileExtension}`
         );
@@ -238,7 +238,7 @@ const MainPlaygroundPage = () => {
     ]
   );
 
-    const handleSaveAll = async () => {
+  const handleSaveAll = async () => {
     const unsavedFiles = openFiles.filter((f) => f.hasUnsavedChanges);
 
     if (unsavedFiles.length === 0) {
@@ -255,19 +255,19 @@ const MainPlaygroundPage = () => {
   };
 
 
-  useEffect(()=>{
-    const handleKeyDown = (e)=>{
-      if(e.ctrlKey && e.key === "s"){
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.key === "s") {
         e.preventDefault()
         handleSave()
       }
     }
-     window.addEventListener("keydown", handleKeyDown);
-     return () => window.removeEventListener("keydown", handleKeyDown);
-  },[handleSave]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleSave]);
 
-  if(error){
-    return(
+  if (error) {
+    return (
       <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] p-4">
         <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
         <h2 className="text-xl font-semibold text-red-600 mb-2">
@@ -286,7 +286,7 @@ const MainPlaygroundPage = () => {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] p-4">
         <FolderOpen className="h-12 w-12 text-amber-500 mb-4" />
-        
+
         <h2 className="text-xl font-semibold text-amber-600 mb-2">
           No template data available
         </h2>
@@ -297,8 +297,8 @@ const MainPlaygroundPage = () => {
     );
   }
 
-  if(isLoading){
-    return(
+  if (isLoading) {
+    return (
       <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] p-4">
         <div className="w-full max-w-md p-6 rounded-lg shadow-sm border">
           <h2 className="text-xl font-semibold mb-6 text-center">
@@ -322,29 +322,29 @@ const MainPlaygroundPage = () => {
     )
   }
 
- 
-    
-    
+
+
+
   return (
     <TooltipProvider>
-       <>
+      <>
         {/* TemplateFileTree */}
         <TemplateFileTree
-        data={templateData}
-        onFileSelect={handleFileSelect}
-        selectedFile={activeFile}
-        title='File Explorer'
-        onAddFile={wrappedHandleAddFile}
-        onAddFolder={wrappedHandleAddFolder}
-        onDeleteFile={wrappedHandleDeleteFile}
-        onDeleteFolder={wrappedHandleDeleteFolder}
-        onRenameFile={wrappedHandleRenameFile}
-        onRenameFolder={wrappedHandleRenameFolder}
+          data={templateData}
+          onFileSelect={handleFileSelect}
+          selectedFile={activeFile}
+          title='File Explorer'
+          onAddFile={wrappedHandleAddFile}
+          onAddFolder={wrappedHandleAddFolder}
+          onDeleteFile={wrappedHandleDeleteFile}
+          onDeleteFolder={wrappedHandleDeleteFolder}
+          onRenameFile={wrappedHandleRenameFile}
+          onRenameFolder={wrappedHandleRenameFolder}
         />
         <SidebarInset>
           <header className='flex h-16 shrink-0 items-center gap-2 border-b px-4'>
-            <SidebarTrigger className='-ml-1'/>
-            <Separator orientation='vertical' className='mr-2 h-4'/>
+            <SidebarTrigger className='-ml-1' />
+            <Separator orientation='vertical' className='mr-2 h-4' />
 
             <div className='flex flex-1 items-center gap-2'>
               <div className='flex flex-col flex-1'>
@@ -352,64 +352,64 @@ const MainPlaygroundPage = () => {
                   {playgroundData?.title || "Code Playground"}
                 </h1>
                 <p className='text-xs text-muted-foreground'>
-                  {openFiles.length} File(s) open 
+                  {openFiles.length} File(s) open
                   {hasUnsavedChanges && " • Unsaved changes"}
                 </p>
               </div>
             </div>
 
             <div className='flex items-center gap-1'>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleSave()}
-                      disabled={!activeFile || !activeFile.hasUnsavedChanges}
-                    >
-                      
-                      <Save className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Save (Ctrl+S)</TooltipContent>  
-                </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleSave()}
+                    disabled={!activeFile || !activeFile.hasUnsavedChanges}
+                  >
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleSaveAll}
-                      disabled={!hasUnsavedChanges}
-                    >
-                      <Save className="h-4 w-4" /> All
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Save All (Ctrl+Shift+S)</TooltipContent>
-                </Tooltip>
+                    <Save className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Save (Ctrl+S)</TooltipContent>
+              </Tooltip>
 
-                <Button variant={"default"} size={"icon"}>
-                  <Bot className='size-4'/>
-                </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleSaveAll}
+                    disabled={!hasUnsavedChanges}
+                  >
+                    <Save className="h-4 w-4" /> All
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Save All (Ctrl+Shift+S)</TooltipContent>
+              </Tooltip>
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="sm" variant="outline">
-                      <Settings className="h-4 w-4" />                   
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => setIsPreviewVisible(!isPreviewVisible)}
-                    >
-                      {isPreviewVisible ? "Hide" : "Show"} Preview
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={closeAllFiles}>
-                      Close All Files
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <Button variant={"default"} size={"icon"}>
+                <Bot className='size-4' />
+              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => setIsPreviewVisible(!isPreviewVisible)}
+                  >
+                    {isPreviewVisible ? "Hide" : "Show"} Preview
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={closeAllFiles}>
+                    Close All Files
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
             </div>
           </header>
@@ -431,7 +431,7 @@ const MainPlaygroundPage = () => {
                           >
                             <div className="flex items-center gap-2">
                               <FileText className="h-3 w-3" />
-                              
+
                               <span>
                                 {file.filename}.{file.fileExtension}
                               </span>
@@ -446,7 +446,7 @@ const MainPlaygroundPage = () => {
                                 }}
                               >
                                 <X className="h-3 w-3" />
-                                
+
                               </span>
                             </div>
                           </TabsTrigger>
@@ -475,12 +475,12 @@ const MainPlaygroundPage = () => {
                       <PlaygroundEditor
                         activeFile={activeFile}
                         content={activeFile?.content || ""}
-                        onContentChange={(value)=> activeFileId && updateFileContent(activeFileId, value)}
-                        
+                        onContentChange={(value) => activeFileId && updateFileContent(activeFileId, value)}
+
                       />
                     </ResizablePanel>
 
-                     {isPreviewVisible && (
+                    {isPreviewVisible && (
                       <>
                         <ResizableHandle />
                         <ResizablePanel defaultSize={50}>
@@ -512,7 +512,7 @@ const MainPlaygroundPage = () => {
             )}
           </div>
         </SidebarInset>
-       </>
+      </>
     </TooltipProvider>
   )
 }

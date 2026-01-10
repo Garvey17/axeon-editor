@@ -13,7 +13,7 @@ const PlaygroundEditor = ({
     const editorRef = useRef(null)
     const monacoRef = useRef(null)
 
-    const handleEditorDidMount = (editor, monaco)=>{
+    const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor
         monacoRef.current = monaco
         console.log("Editor instance mounted:", !!editorRef.current);
@@ -26,9 +26,9 @@ const PlaygroundEditor = ({
     }
 
     const updateEditorLanguage = () => {
-        if(!activeFile || !monacoRef.current || !editorRef.current) return
+        if (!activeFile || !monacoRef.current || !editorRef.current) return
         const model = editorRef.current.getModel()
-        if(!model) return
+        if (!model) return
 
         const language = getEditorLanguage(activeFile.fileExtension || "")
 
@@ -39,21 +39,21 @@ const PlaygroundEditor = ({
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         updateEditorLanguage()
     }, [])
-  return (
-    <div className="h-full relative">
-        <Editor
-        height={"100%"}
-        value={content}
-        onChange={(value) => onContentChange(value || "")}
-        onMount={handleEditorDidMount}
-        language={activeFile ? getEditorLanguage(activeFile.fileExtension || "") : "plaintext"}
-        options={defaultEditorOptions}
-        />
-    </div>
-  )
+    return (
+        <div className="h-full relative">
+            <Editor
+                height={"100%"}
+                value={content}
+                onChange={(value) => onContentChange(value || "")}
+                onMount={handleEditorDidMount}
+                language={activeFile ? getEditorLanguage(activeFile.fileExtension || "") : "plaintext"}
+                options={defaultEditorOptions}
+            />
+        </div>
+    )
 }
 
 export default PlaygroundEditor

@@ -2,30 +2,30 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { getAllPlaygroundForUser } from "../../../modules/dashboard/actions";
 import { DashboardSidebar } from "../../../modules/dashboard/components/dashboard-sidebar";
 
-export default async function DashboardLayout({children}){
+export default async function DashboardLayout({ children }) {
 
     const playgroundData = await getAllPlaygroundForUser()
 
     const technologyIconMap = {
-    REACT: "Zap",
-    NEXTJS: "Lightbulb",
-    EXPRESS: "Database",
-    VUE: "Compass",
-    HONO: "FlameIcon",
-    ANGULAR: "Terminal",
-  }
+        REACT: "Zap",
+        NEXTJS: "Lightbulb",
+        EXPRESS: "Database",
+        VUE: "Compass",
+        HONO: "FlameIcon",
+        ANGULAR: "Terminal",
+    }
 
-  const formattedPlaygroundData = playgroundData?.map((item) => ({
-    id: item.id,
-    name: item.title,
-    icon: technologyIconMap[item.template] || "Code2"
-  }))
-    return(            
+    const formattedPlaygroundData = playgroundData?.map((item) => ({
+        id: item.id,
+        name: item.title,
+        icon: technologyIconMap[item.template] || "Code2"
+    }))
+    return (
         <SidebarProvider>
-            <div className="flex min-h-screen w-full overflow-x-hidden">
+            <div className="flex min-h-screen w-full">
                 {/* Dashboard sidebar */}
-                <DashboardSidebar initialPlaygroundData={formattedPlaygroundData}/>
-                <main className="flex-1">
+                <DashboardSidebar initialPlaygroundData={formattedPlaygroundData} />
+                <main className="flex-1 w-full min-w-0 overflow-x-hidden">
                     {children}
                 </main>
             </div>

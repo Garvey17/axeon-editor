@@ -135,19 +135,19 @@ const templates = [
     category: "fullstack",
   },
 ];
- 
+
 const TemplateSelectionModal = ({
   isOpen,
   onClose,
   onSubmit,
 }) => {
-const [step, setStep] = useState("select");
-const [selectedTemplate, setSelectedTemplate] = useState(null);
-const [searchQuery, setSearchQuery] = useState("");
-const [category, setCategory] = useState("all");
-const [projectName, setProjectName] = useState("");
+  const [step, setStep] = useState("select");
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const [projectName, setProjectName] = useState("");
 
-//Todo Implement Filter Here
+  //Todo Implement Filter Here
 
 
   const handleSelectTemplate = (templateId) => {
@@ -173,12 +173,12 @@ const [projectName, setProjectName] = useState("");
 
       const template = templates.find((t) => t.id === selectedTemplate);
       onSubmit({
-        title:projectName || `New ${template?.name} Project`,
-        template:templateMap[selectedTemplate] || "REACT",
-        description:template?.description
+        title: projectName || `New ${template?.name} Project`,
+        template: templateMap[selectedTemplate] || "REACT",
+        description: template?.description
       })
 
-     
+
       onClose();
       // Reset state for next time
       setStep("select");
@@ -206,17 +206,17 @@ const [projectName, setProjectName] = useState("");
   };
 
   const filteredTemplates = templates.filter((template) => {
-  const matchesSearch =
-    template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    template.description.toLowerCase().includes(searchQuery.toLowerCase()) || template.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch =
+      template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      template.description.toLowerCase().includes(searchQuery.toLowerCase()) || template.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const matchesCategory =
-    category === "all" || template.category === category;
+    const matchesCategory =
+      category === "all" || template.category === category;
 
-  return matchesSearch && matchesCategory;
-});
+    return matchesSearch && matchesCategory;
+  });
 
-      
+
 
   return (
     <Dialog
@@ -235,8 +235,8 @@ const [projectName, setProjectName] = useState("");
         {step === "select" ? (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-[#e93f3f] flex items-center gap-2">
-                <Plus size={24} className="text-[#e93f3f]" />
+              <DialogTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
+                <Plus size={24} className="text-orange-600" />
                 Select a Template
               </DialogTitle>
               <DialogDescription>
@@ -283,11 +283,10 @@ const [projectName, setProjectName] = useState("");
                       <div
                         key={template.id}
                         className={`relative flex p-6 border rounded-lg cursor-pointer transition-all duration-300 hover:scale-[1.02]
-                            ${
-                                selectedTemplate === template.id
-                              ? "border-[#E93F3F]  shadow-[0_0_0_1px_#E93F3F,0_8px_20px_rgba(233,63,63,0.15)]"
-                              : "hover:border-[#E93F3F] shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
-                            }
+                            ${selectedTemplate === template.id
+                            ? "border-foreground shadow-[0_0_0_1px_rgba(0,0,0,0.2),0_8px_20px_rgba(0,0,0,0.15)]"
+                            : "hover:border-foreground shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
+                          }
                             `}
                         onClick={() => handleSelectTemplate(template.id)}
                       >
@@ -296,7 +295,7 @@ const [projectName, setProjectName] = useState("");
                         </div>
 
                         {selectedTemplate === template.id && (
-                          <div className="absolute top-2 left-2 bg-[#E93F3F] text-white rounded-full p-1">
+                          <div className="absolute top-2 left-2 bg-green-500 text-white rounded-full p-1">
                             <Check size={14} />
                           </div>
                         )}
@@ -304,7 +303,7 @@ const [projectName, setProjectName] = useState("");
                         <div className="flex gap-4">
                           <div
                             className="relative w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-full"
-                            style={{ backgroundColor: '{template.color}15'}}
+                            style={{ backgroundColor: '{template.color}15' }}
                           >
                             <Image
                               src={template.icon || "/placeholder.svg"}
@@ -391,7 +390,7 @@ const [projectName, setProjectName] = useState("");
                   Cancel
                 </Button>
                 <Button
-                  className="bg-[#E93F3F] hover:bg-[#d03636]"
+                  className="bg-orange-600 hover:bg-orange-700 text-white"
                   disabled={!selectedTemplate}
                   onClick={handleContinue}
                 >
@@ -403,7 +402,7 @@ const [projectName, setProjectName] = useState("");
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-[#e93f3f]">
+              <DialogTitle className="text-2xl font-bold text-foreground">
                 Configure Your Project
               </DialogTitle>
               <DialogDescription>
@@ -423,14 +422,14 @@ const [projectName, setProjectName] = useState("");
                 />
               </div>
 
-              <div className="p-4 shadow-[0_0_0_1px_#E93F3F,0_8px_20px_rgba(233,63,63,0.15)] rounded-lg border">
+              <div className="p-4 shadow-[0_0_0_1px_rgba(59,130,246,0.2),0_8px_20px_rgba(59,130,246,0.1)] rounded-lg border border-blue-200 bg-blue-50">
                 <h3 className="font-medium mb-2">Selected Template Features</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {templates
                     .find((t) => t.id === selectedTemplate)
                     ?.features.map((feature) => (
                       <div key={feature} className="flex items-center gap-2">
-                        <Zap size={14} className="text-[#E93F3F]" />
+                        <Zap size={14} className="text-orange-600" />
                         <span className="text-sm">{feature}</span>
                       </div>
                     ))}
@@ -443,7 +442,7 @@ const [projectName, setProjectName] = useState("");
                 Back
               </Button>
               <Button
-                className="bg-[#E93F3F] hover:bg-[#d03636]"
+                className="bg-orange-600 hover:bg-orange-700 text-white"
                 onClick={handleCreateProject}
               >
                 Create Project
