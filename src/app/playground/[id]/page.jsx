@@ -24,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bot, FileText, FolderOpen, Save, Settings, X } from 'lucide-react'
+import { AlertCircle, Bot, FileText, FolderOpen, Save, Settings, X } from 'lucide-react'
 import PlaygroundEditor from '../../../../modules/playground/components/plaground-editor'
 import { useWebContainer } from '../../../../modules/webcontainer/hooks/useWebContainer'
 import WebContainerPreview from '../../../../modules/webcontainer/components/webcontainer-preview'
